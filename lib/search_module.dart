@@ -8,10 +8,10 @@ class SearchModule {
   static const API_KEY = "api-key"; // TODO: change
   final _controller = StreamController<AlbumPhoto>.broadcast();
 
-  // Input stream. We add our notes to the stream using this variable.
+  // Input stream. We add our results to the stream using this variable.
   StreamSink<AlbumPhoto> get _sink => _controller.sink;
 
-  // Output stream. This one will be used within our pages to display the notes.
+  // Output stream. This one will be used within our page to display the results.
   Stream<AlbumPhoto> get stream => _controller.stream;
 
   Future<AlbumPhoto> fetchAlbumPhoto(String query, [String lang = "en" ]) async {
