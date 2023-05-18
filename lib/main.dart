@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:pixabay_search/search_module.dart';
 
@@ -14,7 +13,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   final _controller = TextEditingController();
   final searchModule = SearchModule();
 
@@ -27,16 +25,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Search Images with Pixabay',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        resizeToAvoidBottomInset:false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Search Images with Pixabay'),
+          title: Text('Pixabay Images'),
         ),
         body: Column(
           children: <Widget>[
@@ -45,14 +42,14 @@ class _MyAppState extends State<MyApp> {
               textInputAction: TextInputAction.search,
               onSubmitted: (value) => searchModule.search(value),
               decoration: InputDecoration(
-                hintText: "Enter a query",
+                hintText: "Enter a value",
                 prefixIcon: IconButton(
                   onPressed: () => _controller.clear(),
                   icon: Icon(Icons.clear),
                 ),
                 suffixIcon: IconButton(
                   onPressed: () {
-                    FocusScope.of(context).requestFocus(FocusNode()); 
+                    FocusScope.of(context).requestFocus(FocusNode());
                     searchModule.search(_controller.text);
                   },
                   icon: Icon(Icons.search),
@@ -61,31 +58,32 @@ class _MyAppState extends State<MyApp> {
             ),
             Expanded(
               child: StreamBuilder<AlbumPhoto>(
-                stream: searchModule.stream,
-                builder: (BuildContext context, AsyncSnapshot<AlbumPhoto> snapshot) {
-                
-                  if (snapshot.hasData) {
-                      if(snapshot.data.photos.isEmpty)
+                  stream: searchModule.stream,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<AlbumPhoto> snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.photos.isEmpty)
                         return Center(child: Text('No results found'));
 
                       return GestureDetector(
-                        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-                          child: GridView.count(
-                          shrinkWrap: true,
-                          physics: ScrollPhysics(),
-                          crossAxisCount: 3,
-                          children: snapshot.data.photos.map((Photo photo) {
-                            return GridTile(
-                                child: Image.network(photo.url, fit: BoxFit.cover));
-                          }).toList()),
+                        onTap: () =>
+                            FocusScope.of(context).requestFocus(FocusNode()),
+                        child: GridView.count(
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            crossAxisCount: 3,
+                            children: snapshot.data.photos.map((Photo photo) {
+                              return GridTile(
+                                  child: Image.network(photo.url,
+                                      fit: BoxFit.cover));
+                            }).toList()),
                       );
                     } else if (snapshot.hasError) {
                       return Center(child: Text("${snapshot.error}"));
                     }
-                    // By default, show a loading spinner.
+
                     return Center(child: CircularProgressIndicator());
-                  }
-              ),
+                  }),
             ),
           ],
         ),
